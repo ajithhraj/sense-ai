@@ -1,0 +1,112 @@
+/* overlay.css — Reel Sense overlay styles */
+
+#reel-sense-overlay {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 260px;
+  background: rgba(15, 15, 26, 0.95);
+  border: 1px solid rgba(137, 180, 250, 0.3);
+  border-radius: 16px;
+  padding: 16px;
+  z-index: 99999;
+  font-family: 'Segoe UI', sans-serif;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  animation: rs-slide-in 0.3s ease;
+}
+
+@keyframes rs-slide-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.rs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.rs-logo {
+  font-size: 13px;
+  font-weight: bold;
+  color: #cba6f7;
+}
+
+.rs-close {
+  background: none;
+  border: none;
+  color: #6c7086;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  line-height: 1;
+}
+
+.rs-close:hover { color: #f38ba8; }
+
+.rs-verdict {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.rs-score {
+  font-size: 11px;
+  color: #6c7086;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.rs-bars { margin-bottom: 10px; }
+
+.rs-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.rs-bar-label {
+  font-size: 11px;
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.rs-bar-label.pos { color: #a6e3a1; }
+.rs-bar-label.neg { color: #f38ba8; }
+.rs-bar-label.neu { color: #f9e2af; }
+
+.rs-bar-track {
+  flex: 1;
+  height: 8px;
+  background: #313244;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.rs-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+.pos-fill { background: #a6e3a1; }
+.neg-fill { background: #f38ba8; }
+.neu-fill { background: #f9e2af; }
+
+.rs-bar-pct {
+  font-size: 11px;
+  color: #cdd6f4;
+  width: 30px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.rs-count {
+  font-size: 10px;
+  color: #45475a;
+  text-align: center;
+}

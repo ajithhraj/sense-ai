@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sense AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+  :root {
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --border: rgba(255,255,255,0.07);
+    --text-primary: #f5f5f7;
+    --text-secondary: #98989d;
+    --text-tertiary: #48484a;
+    --accent: #2997ff;
+    --green: #30d158;
+    --red: #ff453a;
+    --orange: #ff9f0a;
+    --gray: #48484a;
+  }
+
+  body {
+    width: 320px;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .header {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .logo { display: flex; align-items: center; gap: 8px; }
+
+  .logo-dot {
+    width: 7px; height: 7px;
+    background: var(--accent); border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  .logo-text { font-size: 15px; font-weight: 600; letter-spacing: -0.3px; }
+
+  .logo-badge {
+    font-size: 9px; font-weight: 500;
+    color: var(--text-secondary);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    padding: 2px 7px; border-radius: 20px;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+
+  .status-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--text-tertiary); transition: background 0.3s;
+  }
+  .status-dot.analyzing { background: var(--orange); animation: blink 1s infinite; }
+  .status-dot.done { background: var(--green); }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .body { padding: 14px 20px; }
+
+  #analyze-btn {
+    width: 100%; padding: 11px;
+    background: var(--accent); color: #fff;
+    border: none; border-radius: 10px;
+    font-size: 13px; font-weight: 500;
+    font-family: inherit; cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    margin-bottom: 12px;
+  }
+  #analyze-btn:hover { opacity: 0.88; }
+  #analyze-btn:active { transform: scale(0.98); }
+  #analyze-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+
+  #status {
+    font-size: 11px; color: var(--text-secondary);
+    text-align: center; margin-bottom: 12px; min-height: 15px;
+  }
+
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden; display: none;
+  }
+
+  .score-hero {
+    padding: 18px 20px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .verdict-label {
+    font-size: 10px; font-weight: 500; color: var(--text-tertiary);
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;
+  }
+
+  .verdict-text { font-size: 19px; font-weight: 600; letter-spacing: -0.5px; }
+
+  .verdict-score {
+    font-size: 11px; color: var(--text-secondary);
+    margin-top: 3px; font-variant-numeric: tabular-nums;
+  }
+
+  .grade-circle {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700; border: 2px solid; flex-shrink: 0;
+  }
+
+  .bars-section { padding: 16px 20px; border-bottom: 1px solid var(--border); }
+
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .bar-row:last-child { margin-bottom: 0; }
+
+  .bar-label { font-size: 11.5px; color: var(--text-secondary); width: 58px; flex-shrink: 0; }
+
+  .bar-track { flex: 1; height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+
+  .bar-fill { height: 100%; border-radius: 2px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
+  .pos-fill { background: var(--green); }
+  .neg-fill { background: var(--red); }
+  .neu-fill { background: var(--gray); }
+
+  .bar-pct {
+    font-size: 11.5px; color: var(--text-primary);
+    width: 30px; text-align: right;
+    font-variant-numeric: tabular-nums; font-weight: 500;
+  }
+
+  .insight-section {
+    padding: 14px 20px;
+    font-size: 11.5px; color: var(--text-secondary);
+    line-height: 1.6; font-style: italic;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .count-row {
+    padding: 11px 20px;
+    font-size: 11px; color: var(--text-tertiary);
+  }
+
+  .error-msg {
+    background: rgba(255,69,58,0.08);
+    border: 1px solid rgba(255,69,58,0.2);
+    border-radius: 10px; padding: 12px 14px;
+    font-size: 12px; color: #ff6961;
+    line-height: 1.5; display: none; text-align: center;
+  }
+
+  .footer {
+    padding: 10px 20px; border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  .footer-text { font-size: 10.5px; color: var(--text-tertiary); }
+  .footer-text span { color: var(--text-secondary); }
+
+  .dot-pulse { display: inline-flex; gap: 4px; align-items: center; justify-content: center; }
+  .dot-pulse span { width: 4px; height: 4px; background: var(--text-secondary); border-radius: 50%; animation: pulse 1.2s ease-in-out infinite; }
+  .dot-pulse span:nth-child(2) { animation-delay: 0.2s; }
+  .dot-pulse span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes pulse { 0%,80%,100%{opacity:0.2;transform:scale(0.8)} 40%{opacity:1;transform:scale(1)} }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <div class="logo-dot"></div>
+    <span class="logo-text">Sense AI</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <div class="status-dot" id="status-dot"></div>
+    <span class="logo-badge">YouTube</span>
+  </div>
+</div>
+
+<div class="body">
+  <button id="analyze-btn">Analyze Comments</button>
+  <div id="status">Open a YouTube video and scroll to load comments.</div>
+
+  <div class="result-card" id="result-card">
+
+    <div class="score-hero">
+      <div>
+        <div class="verdict-label">Overall Sentiment</div>
+        <div class="verdict-text" id="verdict-text"></div>
+        <div class="verdict-score" id="verdict-score"></div>
+      </div>
+      <div class="grade-circle" id="grade-circle"></div>
+    </div>
+
+    <div class="bars-section">
+      <div class="bar-row">
+        <span class="bar-label">Positive</span>
+        <div class="bar-track"><div class="bar-fill pos-fill" id="pos-bar"></div></div>
+        <span class="bar-pct" id="pos-pct"></span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Negative</span>
+        <div class="bar-track"><div class="bar-fill neg-fill" id="neg-bar"></div></div>
+        <span class="bar-pct" id="neg-pct"></span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Neutral</span>
+        <div class="bar-track"><div class="bar-fill neu-fill" id="neu-bar"></div></div>
+        <span class="bar-pct" id="neu-pct"></span>
+      </div>
+    </div>
+
+    <div class="insight-section" id="insight-section" style="display:none"></div>
+
+    <div class="count-row" id="count-row"></div>
+
+  </div>
+
+  <div class="error-msg" id="error-msg"></div>
+</div>
+
+<div class="footer">
+  <span class="footer-text">by <span>Ajith Raj</span></span>
+  <span class="footer-text" id="auto-tag"></span>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>
