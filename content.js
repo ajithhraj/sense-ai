@@ -1,7 +1,7 @@
 // content.js — Sense AI v4.5
 // Auto-scrolls to load more comments before analyzing
 
-const GROQ_API_KEY = "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";
+const GROQ_API_KEY = "INSERT_API";
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
 
 let isAnalyzing = false;
