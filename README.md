@@ -1,96 +1,85 @@
-# 🎯 Reel Sense — Instagram Comment Sentiment Analyzer
+# Sense AI — YouTube Sentiment Analyzer
 
-A Chrome Extension that analyzes the sentiment of Instagram Reel comments in **real time** — right in your browser, with zero setup and no backend server.
+A Chrome extension that uses **LLaMA 3.1** via **Groq API** to analyze the sentiment of YouTube comments in real time.
 
----
+## Features
 
-## ✨ Features
+- **AI-powered sentiment analysis** — not just keyword matching, uses LLaMA 3.1 to understand context, sarcasm, and slang
+- **Auto-analyzes on page load** — opens any YouTube video and starts analyzing automatically
+- **Badge on icon** — shows POS / NEG / MID on the extension icon so you know the vibe without clicking
+- **Understands YouTube slang** — W, L, ratio, mid, no cap, based, and more
+- **Clean minimal UI** — dark theme, Inter font, no clutter
 
-- 🔍 **Scrapes comments** directly from any Instagram Reel
-- 🧠 **Custom NLP engine** — runs 100% in the browser (no API, no server)
-- 😊😠😐 **3-label sentiment** — Positive, Negative, Neutral
-- 📊 **Live overlay** on the page with sentiment bars
-- 🎯 **Popup dashboard** with top positive/negative comments
-- ⚡ **Instant** — analyzes 100 comments in under 1 second
-- 🔒 **Privacy-first** — no data ever leaves your browser
+## How It Works
 
----
+1. Open any YouTube video
+2. The extension auto-scrolls to load comments
+3. Sends up to 50 comments to Groq API (LLaMA 3.1)
+4. Displays sentiment verdict, score, and breakdown
+5. Badge on icon updates automatically
 
-## 🖥️ Screenshots
+## Screenshots
 
-> Overlay shown on Instagram Reel:
-> - 🔥 "Loving it!" — audience is hyped
-> - 📊 67% Positive | 8% Negative | 25% Neutral
+> Coming soon
 
----
+## Installation
 
-## 🚀 Installation (Chrome)
+### 1. Clone the repo
+```bash
+git clone https://github.com/ajithhraj/sense-ai.git
+cd sense-ai
+```
 
-1. Download or clone this repo
-2. Open Chrome → go to `chrome://extensions/`
-3. Enable **"Developer mode"** (top right toggle)
-4. Click **"Load unpacked"**
-5. Select the `reel-sense` folder
-6. The 🎯 icon appears in your toolbar!
+### 2. Add your Groq API key
+- Get a free key at [console.groq.com](https://console.groq.com)
+- Open `content.js` and replace line 4:
+```js
+const GROQ_API_KEY = "YOUR_GROQ_API_KEY";
+```
 
----
+### 3. Load in Chrome
+1. Go to `chrome://extensions/`
+2. Enable **Developer mode** (top right)
+3. Click **Load unpacked**
+4. Select the `sense-ai` folder
 
-## 📖 How to Use
+## Tech Stack
 
-1. Go to **[instagram.com](https://instagram.com)**
-2. Open any **Reel**
-3. Scroll down to load some comments
-4. Click the 🎯 **Reel Sense** icon in Chrome toolbar
-5. Click **"⚡ Analyze This Reel"**
-6. See the sentiment breakdown instantly!
+| Component | Technology |
+|-----------|-----------|
+| Extension | Chrome Manifest V3 |
+| AI Model | LLaMA 3.1 8B Instant |
+| API | Groq (free tier) |
+| Frontend | Vanilla JS, HTML, CSS |
+| Font | Inter (Google Fonts) |
 
----
+## Sentiment Labels
 
-## 📁 Project Structure
+| Verdict | Score Range |
+|---------|------------|
+| Highly Positive | > 0.3 |
+| Mostly Positive | 0.1 – 0.3 |
+| Mixed Sentiment | -0.1 – 0.1 |
+| Mostly Negative | -0.3 – -0.1 |
+| Highly Negative | < -0.3 |
+
+## Project Structure
 
 ```
-reel-sense/
+sense-ai/
 ├── manifest.json       # Chrome extension config
-├── content.js          # Comment scraper + NLP engine
-├── overlay.css         # Live overlay styles
+├── content.js          # Comment scraper + Groq API call
 ├── popup.html          # Extension popup UI
 ├── popup.js            # Popup logic
+├── background.js       # Badge updates
 ├── icons/              # Extension icons
 └── README.md
 ```
 
----
+## Author
 
-## 🧠 How the NLP Works
+**Ajith Raj** — [github.com/ajithhraj](https://github.com/ajithhraj)
 
-Built **from scratch in JavaScript** — no external ML libraries:
+## License
 
-1. **Social media lexicon** — vocabulary tuned for Instagram/TikTok slang, emojis, Gen Z language
-2. **Emoji detection** — ❤️🔥👏 boost positive; 😡👎🤮 boost negative
-3. **Negation handling** — "not bad", "never boring" handled correctly
-4. **Intensifier boosting** — "literally amazing", "so fire" amplified
-5. **Compound scoring** — normalized to [-1.0, +1.0]
-
----
-
-## 🔮 Future Plans
-
-- [ ] TikTok comment support
-- [ ] YouTube Shorts support
-- [ ] Upgrade to Transformers.js (BERT model in browser)
-- [ ] Emotion detection (joy, anger, surprise, sadness)
-- [ ] Export report as PDF
-
----
-
-## 👤 Author
-
-**Ajith Raj** — [@ajithhraj](https://github.com/ajithhraj)
-
-Built as part of preparation for **Google Summer of Code 2026**.
-
----
-
-## 📄 License
-
-MIT License
+MIT
